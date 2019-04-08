@@ -43,6 +43,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'seed-fu', '~> 2.3'
   gem 'slim-rails'
+  gem 'faker'
 end
 
 group :development do
