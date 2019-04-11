@@ -5,3 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+load 'db/fixtures/activities.rb'
+load 'db/fixtures/languages.rb'
+load 'db/fixtures/guides.rb'
+load 'db/fixtures/guidelanguage.rb'

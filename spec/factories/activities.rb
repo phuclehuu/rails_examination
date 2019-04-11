@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :activity do
-    name { "MyString" }
+    name { "cooking" }
   end
 end

@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :guide do
-    email { "MyString" }
+    email { "joe@gmail.com" }
   end
 end
