@@ -1,21 +1,4 @@
-h1 Listing reviews
-
-table
-  thead
-    tr
-      th Score
-      th Comment
-      th Action
-
-  tbody
-    - @reviews.each do |review|
-      tr
-        td = review.score
-        td = link_to review.comment, review
-        td = link_to 'Destroy', review, data: { confirm: 'Are you sure?' }, method: :delete
-
-br
-
-h1 New review
-
-== render 'form'
+= javascript_pack_tag 'reviews'
+h1 Reviews
+h3 = 'Guide: ' + @guide.email
+div id="reviews-list"
