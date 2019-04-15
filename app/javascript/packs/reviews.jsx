@@ -13,6 +13,10 @@ class Reviews extends Component {
         super(pros);
 
         this.state = {
+            headers: {
+                'Accept': 'application/json',
+                "Content-Type": "application/json",
+                'X-CSRF-Token': document.getElementsByName('csrf-token')[0].content},
             errors: {score: []},
             score: '',
             comment: '',
@@ -29,10 +33,7 @@ class Reviews extends Component {
 
     loadReviews() {
         return fetch('', {
-            headers: {
-                'Accept': 'application/json',
-                "Content-Type": "application/json"
-            }
+            headers: this.state.headers
         }).then(function (response) {
             return response.json()
         }).then(function (reviews) {
@@ -51,10 +52,11 @@ class Reviews extends Component {
 
     handleSubmit(e) {
         let that = this;
+        let auth = this.props;
         that.setState({errors: {score: []}});
         fetch('', {
             method: 'post',
-            headers: {'Content-Type':'application/json', 'X-CSRF-Token': this.state.token},
+            headers: this.state.headers,
             body: JSON.stringify({
                 "score": this.state.score,
                 "comment": this.state.comment
@@ -78,22 +80,30 @@ class Reviews extends Component {
         e.preventDefault();
     }
 
-    deleteReview(e) {
+    deleteReview(review, e) {
+        let that = this;
         e.preventDefault();
-        console.log('The link was clicked.');
-        // fetch(review.url, {
-        //     method: 'delete',
-        //     headers: {'Content-Type':'application/json', 'X-CSRF-Token': this.state.token},
-        //     body: JSON.stringify({
-        //         "_method": "delete",
-        //         "authenticity_token": this.state.token
-        //     })
-        // })
-        // .then(function(response){
-        //     return response.json();
-        // }).then(function(result){
-        //     return result;
-        // });
+        fetch(review.url, {
+            method: 'delete',
+            headers: this.state.headers,
+            body: JSON.stringify({
+                "_method": "delete",
+                "authenticity_token": this.state.token
+            })
+        })
+        .then(function(response){
+            if (response.status == 204){
+                let reviews = that.state.reviewResults;
+                let index = reviews.indexOf(review);
+                if (index !== -1){
+                    reviews.splice(index, 1);
+                    that.setState({reviewResults: reviews});
+                }
+            }else {
+                alert('Can\'t delete this review. Please try again!');
+            }
+            return response;
+        });
     }
 
     render() {
@@ -106,11 +116,9 @@ class Reviews extends Component {
                     React.createElement("td", null, response.score),
                     React.createElement("td", null, response.comment),
                     React.createElement("td", null, React.createElement('a', {
-                        // href: response.url,
-                        href: '#',
-                        // 'data-confirm': 'Are you sure?',
-                        'data-method': 'delete',
-                        onClick: this.deleteReview
+                        href: response.url,
+                        'data-confirm': 'Are you sure?',
+                        onClick: this.deleteReview.bind(this, response)
                     }, 'Delete'))
             ));
         });
