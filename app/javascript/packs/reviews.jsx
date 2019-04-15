@@ -21,18 +21,19 @@ class Reviews extends Component {
             score: '',
             comment: '',
             reviewResults: [],
-            token: document.getElementsByName('csrf-token')[0].content
+            token: document.getElementsByName('csrf-token')[0].content,
+            sortDirection: 'asc'
         };
 
-        this.loadReviews().then((reviews) => {
+        this.loadReviews(this.state.sortDirection).then((reviews) => {
             this.setState({reviewResults: reviews})
         });
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    loadReviews() {
-        return fetch('', {
+    loadReviews(direction) {
+        return fetch('?direction=' + direction, {
             headers: this.state.headers
         }).then(function (response) {
             return response.json()
@@ -106,6 +107,16 @@ class Reviews extends Component {
         });
     }
 
+    sortRequest() {
+        let direction = this.state.sortDirection;
+        direction = direction == "asc" ? "desc" : "asc";
+        this.setState({sortDirection: direction}, function () {
+            this.loadReviews(this.state.sortDirection).then((reviews) => {
+                this.setState({reviewResults: reviews})
+            });
+        });
+    }
+
     render() {
         let reviews = this.state.reviewResults.map((response, index) => {
 
@@ -157,7 +168,12 @@ class Reviews extends Component {
                         React.createElement("tr", null,
                             React.createElement("th", {
                                 width: "30%"
-                            }, "Score"),
+                            }, "Score",
+                                React.createElement("span", {
+                                    onClick: this.sortRequest.bind(this),
+                                    className: 'score ' + this.state.sortDirection
+                                })
+                            ),
                             React.createElement("th", {
                                 width: "30%"
                             }, "Comment"),

@@ -1,0 +1,14 @@
+th span {
+  cursor: pointer;
+  background-image: image-url('arrow-sort-up-down.png');
+  padding-right: 30px;
+  background-repeat: no-repeat;
+}
+th .asc {
+    background-position: 5px 1px;
+    background-size: 30px;
+}
+th .desc {
+    background-position: 5px -15px;
+    background-size: 30px;
+}

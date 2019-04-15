@@ -3,7 +3,7 @@ class ReviewsController < ApplicationController
 
   def index
     if request.content_type == 'application/json'
-      @reviews = Review.all.where('guide_id =?', params[:guide_id])
+      @reviews = Review.all.where('guide_id =?', params[:guide_id]).order(sort_column + " " + sort_direction)
     else
       @guide = Guide.find(params[:guide_id]) rescue nil
     end
@@ -36,5 +36,13 @@ class ReviewsController < ApplicationController
 
     def force_json
       request.format = :json
+    end
+
+    def sort_column
+      Review.column_names.include?(params[:sort]) ? params[:sort] : "score"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end
 end
