@@ -1,7 +1,9 @@
 class GuideService
 	def initialize(params)
-		@language_codes = params[:l].tr(' ','').split(',');
-		@activity_names = params[:a].tr(' ','').split(',');
+		languages_request = params[:l] == nil ? '' : params[:l].tr(' ','');
+		activities_request = params[:a] == nil ? '' : params[:a].tr(' ','');
+		@language_codes = languages_request.split(',');
+		@activity_names = activities_request.split(',');
 
 		language_count = @language_codes.count == 0 ? 1 : @language_codes.count;
 		activity_count = @activity_names.count == 0 ? 1 : @activity_names.count;
@@ -14,5 +16,9 @@ class GuideService
 		Guide.ransack({languages_code_in: @language_codes, activities_name_in: @activity_names}).result()
 			.having('count(guides.id) >= ?', @length_cond).group('guides.id')
 			.includes(:languages, :activities).limit(100);
+	end
+	def all
+		Guide.ransack().result()
+			.includes(:languages, :activities);
 	end
 end
