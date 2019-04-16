@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 class Dashboard extends Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
 
     this.state = {
@@ -60,16 +60,28 @@ class Dashboard extends Component {
     return result;
   }
 
+  goToReviewPage(review_url, e){
+    e.preventDefault();
+    window.location.href = review_url;
+    return true;
+  }
+
   render(){
     let autoCompleteList = this.state.autoCompleteResults.map((response, index) => {
       
       return (
       	React.createElement("tr", {
 		    key: index
-		}, 
+		    }, 
         React.createElement("td", null, index + 1, ". ", response.email), 
         React.createElement("td", null, this.toString(', ', response.languages, 'code')), 
-        React.createElement("td", null, this.toString(', ', response.activities, 'name')))
+        React.createElement("td", null, this.toString(', ', response.activities, 'name')), 
+        React.createElement("td", null, 
+          React.createElement('a', {
+                        href: response.review_url,
+                        onClick: this.goToReviewPage.bind(this, response.review_url)
+                    }, 'Review')
+        ))
       )
     });
 
@@ -85,9 +97,12 @@ class Dashboard extends Component {
 					React.createElement("th", {
 			    width: "30%"
 			}, "Languages"), 
-					React.createElement("th", {
-			    width: "40%"
-			}, "Activities")), 
+          React.createElement("th", {
+          width: "40%"
+      }, "Activities"), 
+          React.createElement("th", {
+          width: "10%"
+      }, "Action")), 
 				React.createElement("tr", null, 
 					React.createElement("td", null), 
 					React.createElement("td", null, 
@@ -104,20 +119,21 @@ class Dashboard extends Component {
 					        width: '98%'
 					    }
 					})), 
-					React.createElement("td", null, 
-						React.createElement("input", {
-					    ref: input => {
-					        this.searchBar = input;
-					    },
-					    name: "activities",
-					    value: this.state.activities,
-					    onChange: this.getAutoCompleteResults.bind(this),
-					    type: "text",
-					    placeholder: "Search activities...",
-					    style: {
-					        width: '98%'
-					    }
-					}))
+          React.createElement("td", null, 
+            React.createElement("input", {
+              ref: input => {
+                  this.searchBar = input;
+              },
+              name: "activities",
+              value: this.state.activities,
+              onChange: this.getAutoCompleteResults.bind(this),
+              type: "text",
+              placeholder: "Search activities...",
+              style: {
+                  width: '98%'
+              }
+          })), 
+          React.createElement("td", null, '')
 				), autoCompleteList)
 			)
 		)
