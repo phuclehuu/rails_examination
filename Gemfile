@@ -61,3 +61,4 @@ gem 'webpacker'
 gem 'slim-rails'
 gem 'react-rails'
 gem 'ransack'
+gem 'wdm', '>= 0.1.0' if Gem.win_platform?
