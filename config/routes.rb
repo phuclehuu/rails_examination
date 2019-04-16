@@ -6,4 +6,11 @@ Rails.application.routes.draw do
 	root to: 'dashboard#index'
 	get :search, controller: :main
 	get :languages_no_one_speaks, controller: :main
+
+	namespace :api do
+		namespace :v1 do
+			resources :guides, only: [:index] do
+			end
+		end
+	end
 end
