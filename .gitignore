@@ -31,3 +31,10 @@ yarn-debug.log*
 
 Gemfile.lock
 .idea/
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
