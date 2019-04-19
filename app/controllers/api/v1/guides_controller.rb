@@ -2,6 +2,7 @@ class Api::V1::GuidesController < ApplicationController
 	before_action :force_json, only: [:index]
 	def index
 		@guides = GuideService.new(params).all
+		fresh_when etag: @guides, public: true
 	end
 
 	private
