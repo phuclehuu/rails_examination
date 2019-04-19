@@ -1,4 +1,5 @@
 class Activity < ApplicationRecord
-	has_and_belongs_to_many :guides
+	has_many :activities_guides
+	has_many :guides, through: :activities_guides
 	validates :name, uniqueness: true, presence: true
 end
